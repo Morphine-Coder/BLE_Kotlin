@@ -9,16 +9,22 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.adapter.ChatAdapter
 import kr.intin.ble_kotlin.databinding.FragmentCommunicateBinding
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
 
+@AndroidEntryPoint
 class CommunicateFragment : Fragment() {
 
     private lateinit var binding: FragmentCommunicateBinding
     private val adapter : ChatAdapter = ChatAdapter()
+    private val model : MainViewModel by activityViewModels()
     private val TAG = CommunicateFragment::class.java.simpleName
 
     override fun onCreateView(
@@ -33,26 +39,24 @@ class CommunicateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model : MainViewModel by activityViewModels()
+
         binding.model = model
         model.responseData.observe(requireActivity(), Observer {
             //Adapter에 추가.
             adapter.addResponse(it)
         })
-        //state > int
+
         model.connectState.observe(requireActivity(), Observer {
-            if (!it) {
+            if (it == 0) {
                 Toast.makeText(context, "연결이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                //findNavController().navigate(R.id.action_communicateFragment_to_mainFragment)
-                findNavController().navigateUp()
+                findNavController().navigate(R.id.action_communicateFragment_to_resultFragment)
             }
         })
 
-        binding.btnSend.setOnClickListener {
-            model.sendData(binding.editMsg.text.toString())
-            //adapter.addResponse(binding.editMsg.text.toString())
-            binding.editMsg.text.clear()
-        }
+        model.usedTimer.observe(requireActivity(), Observer {
+            binding.tvTimer.text = "$it 초"
+        })
+
     }
 
 }

@@ -14,18 +14,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>(){
 
     private val response = arrayListOf<String>()
 
-    class ChatViewHolder (val binding: ItemReceivemsgBinding) : RecyclerView.ViewHolder(binding.root){
-
-        fun bind(s : String) {
-            binding.executePendingBindings()
-            val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
-            binding.chatTime = "$s : $date"
-        }
-        @BindingAdapter("chatTime")
-        fun setChatTime(textView: TextView, s : String) {
-            textView.text = s
-        }
-    }
+    class ChatViewHolder (val binding: ItemReceivemsgBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -35,9 +24,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>(){
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
 
-        holder.apply {
-            bind(response[position])
-        }
+        val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
+
+        holder.binding.chatTime = "${response[position]} : $date"
     }
 
     override fun getItemCount(): Int {
@@ -48,4 +37,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>(){
         response.add(s)
         notifyDataSetChanged()
     }
+}
+
+@BindingAdapter("chatTime")
+fun setChatTime(textView: TextView, s : String) {
+    textView.text = s
 }

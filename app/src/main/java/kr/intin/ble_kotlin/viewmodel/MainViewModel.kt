@@ -1,34 +1,33 @@
 package kr.intin.ble_kotlin.viewmodel
 
-import android.app.Application
+
 import android.bluetooth.*
+import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kr.intin.ble_kotlin.adapter.BLEAdapter
-import kr.intin.ble_kotlin.di.BLEModule
+import kr.intin.ble_kotlin.di.annotation.RXService
+import kr.intin.ble_kotlin.di.annotation.TXChat
 import java.util.*
+import kotlin.concurrent.timerTask
 import kotlin.experimental.and
 
 
 class MainViewModel @ViewModelInject constructor(
-    private val bleModule: BLEModule,
-    private val context: Context,
-    private val RX_SERVICE_UUID : UUID,
-    private val TX_CHAR_UUID: UUID
+    private val scanner: BluetoothLeScanner,
+    @RXService private val RX_SERVICE_UUID: UUID,
+    @TXChat private val TX_CHAR_UUID: UUID
 ) : ViewModel() {
 
     private val TAG = MainViewModel::class.java.simpleName
-    private val scanner = bleModule.provideBLEModule(context)
+
     val scanResultLiveData = MutableLiveData<ScanResult?>()
     private val scanCallback = object :ScanCallback(){
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -38,14 +37,11 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-
-
     private var bluetoothGatt: BluetoothGatt? = null
     private var characteristic: BluetoothGattCharacteristic? = null
     val responseData = MutableLiveData<String>()
-    val connectState = MutableLiveData<Boolean>()
-
-
+    val connectState = MutableLiveData<Int>()
+    val usedTimer = MutableLiveData<Int>(0)
 
     private val gattCallback = object : BluetoothGattCallback() {
 
@@ -54,15 +50,13 @@ class MainViewModel @ViewModelInject constructor(
             if(newState == 2){
                 bluetoothGatt = gatt
                 bluetoothGatt?.discoverServices()
-                connectState.postValue(true)
+                connectState.postValue(newState)
                 Log.d(TAG, "onConnectionStateChange : $newState / $status")
             }
             else if (newState == 0){
-                connectState.postValue(false)
+                connectState.postValue(newState)
                 bluetoothGatt = null
-                characteristic = null
                 Log.d(TAG, "onConnectionStateChange : $newState / $status")
-                scan2()
             }
 
         }
@@ -141,18 +135,17 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+
+    private val timer = Timer()
+    private lateinit var timerTask : TimerTask
     fun scan() {
         scanner.startScan(scanCallback)
         Log.d(TAG, "startScan")
     }
 
-    fun scan2() {
-        scanner.startScan(scanCallback)
-        Log.d(TAG, "startScan2")
-    }
-
-    fun connect(result: ScanResult?) {
+    fun connect(result: ScanResult?, context: Context?) {
         stop()
+        scanResultLiveData.value = result
         result?.device?.connectGatt(context, false, gattCallback)
     }
 
@@ -175,9 +168,57 @@ class MainViewModel @ViewModelInject constructor(
         responseData.postValue(s)
     }
 
-    fun sendData (data : String) {
-        characteristic?.value = String2Byte(data)
-        characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-        bluetoothGatt?.writeCharacteristic(characteristic)
+    private fun sendData (data : String) {
+        if(characteristic == null) {
+            usedTimer.value = 99999
+        }
+        else{
+            characteristic?.value = String2Byte(data)
+            characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+            bluetoothGatt?.writeCharacteristic(characteristic) // 수정해야 함. 11.27
+        }
     }
+
+    fun sendStart() {
+        sendData("START")
+        timerTask = makeTimerTask()
+        timer.schedule(timerTask, 0, 1000)
+    }
+
+    fun sendPause() {
+        timerTask.cancel()
+        sendData("PAUSE")
+    }
+
+    fun sendEnd() {
+        sendData("END")
+        timerTask.cancel()
+        usedTimer.value = 0
+    }
+
+    fun sendTime() {
+
+    }
+
+    fun sendInfo() {
+        sendData("INF")
+    }
+
+    fun sendOff() {
+        sendData("OFF")
+    }
+
+    private fun makeTimerTask () : TimerTask {
+
+        return object : TimerTask() {
+            override fun run() {
+                viewModelScope.launch {
+                    usedTimer.postValue(usedTimer.value?.plus(1))
+                    Log.d(TAG, "TIMER")
+                }
+            }
+        }
+
+    }
+
 }

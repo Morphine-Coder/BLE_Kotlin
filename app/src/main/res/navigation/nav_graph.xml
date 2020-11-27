@@ -20,7 +20,16 @@
         android:label="fragment_communicate"
         tools:layout="@layout/fragment_communicate" >
         <action
-            android:id="@+id/action_communicateFragment_to_mainFragment"
+            android:id="@+id/action_communicateFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="kr.intin.ble_kotlin.ui.ResultFragment"
+        android:label="ResultFragment"
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_resultFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

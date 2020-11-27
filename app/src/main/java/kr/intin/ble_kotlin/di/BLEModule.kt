@@ -3,30 +3,31 @@ package kr.intin.ble_kotlin.di
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
-import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanResult
 import android.content.Context
-import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kr.intin.ble_kotlin.di.annotation.RXService
 import kr.intin.ble_kotlin.di.annotation.TXChat
 import java.util.*
+import javax.inject.Singleton
+
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object BLEModule {
 
     @Provides
+    @Singleton
     fun provideBLEModule (@ApplicationContext context: Context): BluetoothLeScanner {
         val adapter : BluetoothAdapter by lazy(LazyThreadSafetyMode.NONE) {
+            //val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             manager.adapter
         }
-
         return adapter.bluetoothLeScanner
     }
 
