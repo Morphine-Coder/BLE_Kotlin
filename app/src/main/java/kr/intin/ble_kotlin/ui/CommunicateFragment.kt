@@ -18,6 +18,7 @@ import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.adapter.ChatAdapter
 import kr.intin.ble_kotlin.databinding.FragmentCommunicateBinding
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
+import java.text.SimpleDateFormat
 
 @AndroidEntryPoint
 class CommunicateFragment : Fragment() {
@@ -54,7 +55,7 @@ class CommunicateFragment : Fragment() {
         })
 
         model.usedTimer.observe(requireActivity(), Observer {
-            binding.tvTimer.text = "$it 초"
+            binding.tvTimer.text = model.timeString(it)
         })
 
     }

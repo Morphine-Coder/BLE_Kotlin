@@ -13,17 +13,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kr.intin.ble_kotlin.data.dao.UseTimeDAO
+import kr.intin.ble_kotlin.data.entity.UseTime
 import kr.intin.ble_kotlin.di.annotation.RXService
 import kr.intin.ble_kotlin.di.annotation.TXChat
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.timerTask
 import kotlin.experimental.and
 
 
 class MainViewModel @ViewModelInject constructor(
     private val scanner: BluetoothLeScanner,
     @RXService private val RX_SERVICE_UUID: UUID,
-    @TXChat private val TX_CHAR_UUID: UUID
+    @TXChat private val TX_CHAR_UUID: UUID,
+    val db: UseTimeDAO
 ) : ViewModel() {
 
     private val TAG = MainViewModel::class.java.simpleName
@@ -138,6 +141,8 @@ class MainViewModel @ViewModelInject constructor(
 
     private val timer = Timer()
     private lateinit var timerTask : TimerTask
+    private lateinit var today : String
+
     fun scan() {
         scanner.startScan(scanCallback)
         Log.d(TAG, "startScan")
@@ -181,18 +186,26 @@ class MainViewModel @ViewModelInject constructor(
 
     fun sendStart() {
         sendData("START")
-        timerTask = makeTimerTask()
-        timer.schedule(timerTask, 0, 1000)
+        timerStart()
+        today = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
 
     fun sendPause() {
-        timerTask.cancel()
         sendData("PAUSE")
+        timerTask.cancel()
     }
+
 
     fun sendEnd() {
         sendData("END")
         timerTask.cancel()
+        val usedTime = usedTimer.value
+        val useTime = UseTime(index = 0, usedTime = usedTime, usedDate = today)
+
+        viewModelScope.launch (Dispatchers.IO){
+            db.insertTime(useTime)
+        }
+
         usedTimer.value = 0
     }
 
@@ -206,6 +219,15 @@ class MainViewModel @ViewModelInject constructor(
 
     fun sendOff() {
         sendData("OFF")
+        timerTask.cancel()
+        val usedTime = usedTimer.value
+        val useTime = UseTime(index = 0, usedTime = usedTime, usedDate = today)
+
+        viewModelScope.launch (Dispatchers.IO){
+            db.insertTime(useTime)
+        }
+
+        usedTimer.value = 0
     }
 
     private fun makeTimerTask () : TimerTask {
@@ -219,6 +241,20 @@ class MainViewModel @ViewModelInject constructor(
             }
         }
 
+    }
+
+    private fun timerStart() {
+        timerTask = makeTimerTask()
+        timer.schedule(timerTask, 0, 1000)
+    }
+
+    fun timeString (sec : Int) : String {
+        return if(sec >= 60) {
+            "${sec/60} : ${sec%60}"
+        }
+        else {
+            "00 : $sec"
+        }
     }
 
 }

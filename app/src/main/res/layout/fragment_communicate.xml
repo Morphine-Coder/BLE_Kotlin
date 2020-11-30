@@ -70,6 +70,7 @@
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/tv_timer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_off"
@@ -133,13 +134,15 @@
             android:id="@+id/tv_timer"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
-            tools:text="18초"
-            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:textColor="@color/blue"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_receiveMsg" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_receiveMsg"
+            tools:text="18초" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
