@@ -13,8 +13,8 @@ interface UseTimeDAO {
     @Insert
     fun insertTime(useTime: UseTime)
 
-    @Query("SELECT used_time FROM UseTime WHERE used_date IN (:used_date)")
-    fun getTime(used_date : String): LiveData<List<Int>>
+    @Query("SELECT used_time FROM UseTime WHERE used_date == (:used_date)")
+    fun getTime(used_date : String): List<Int>
 
     @Query("SELECT * FROM UseTime")
     fun getAll(): List<UseTime>

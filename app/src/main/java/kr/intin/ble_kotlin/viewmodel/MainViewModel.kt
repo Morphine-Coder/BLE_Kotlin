@@ -141,7 +141,8 @@ class MainViewModel @ViewModelInject constructor(
 
     private val timer = Timer()
     private lateinit var timerTask : TimerTask
-    private lateinit var today : String
+    private val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
+    private lateinit var startedTime: String
 
     fun scan() {
         scanner.startScan(scanCallback)
@@ -165,10 +166,12 @@ class MainViewModel @ViewModelInject constructor(
 
     private suspend fun showAdapter(data: ByteArray) {
         val stringBuilder = StringBuilder()
-        val s = String(data)
+        var s = String(data)
         for (b in data) {
             stringBuilder.append(String.format("%02X", b and 0xff.toByte()))
         }
+        val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
+        s += date
         Log.d(TAG, s)
         responseData.postValue(s)
     }
@@ -187,7 +190,7 @@ class MainViewModel @ViewModelInject constructor(
     fun sendStart() {
         sendData("START")
         timerStart()
-        today = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+        startedTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
 
     fun sendPause() {
@@ -200,7 +203,7 @@ class MainViewModel @ViewModelInject constructor(
         sendData("END")
         timerTask.cancel()
         val usedTime = usedTimer.value
-        val useTime = UseTime(index = 0, usedTime = usedTime, usedDate = today)
+        val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
 
         viewModelScope.launch (Dispatchers.IO){
             db.insertTime(useTime)
@@ -221,7 +224,7 @@ class MainViewModel @ViewModelInject constructor(
         sendData("OFF")
         timerTask.cancel()
         val usedTime = usedTimer.value
-        val useTime = UseTime(index = 0, usedTime = usedTime, usedDate = today)
+        val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
 
         viewModelScope.launch (Dispatchers.IO){
             db.insertTime(useTime)
@@ -249,12 +252,24 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun timeString (sec : Int) : String {
-        return if(sec >= 60) {
-            "${sec/60} : ${sec%60}"
-        }
-        else {
-            "00 : $sec"
+       return if(sec >= 60){
+            when {
+                ((sec / 60) < 10) and ((sec % 60) < 10) -> {
+                    "0${sec / 60}:0${sec%60}"
+                }
+                ((sec / 60) >= 10) and ((sec % 60) < 10) -> {
+                    "${sec / 60}:0${sec%60}"
+                }
+                ((sec / 60) < 10) and ((sec % 60) >= 10) -> {
+                    "0${sec / 60}:${sec%60}"
+                }
+                else -> {
+                    "${sec / 60}:${sec%60}"
+                }
+            }
+        } else {
+            if(sec % 60 < 10) "00:0${sec%60}"
+            else "00:${sec%60}"
         }
     }
-
 }

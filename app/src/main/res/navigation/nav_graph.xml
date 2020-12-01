@@ -31,5 +31,13 @@
         <action
             android:id="@+id/action_resultFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_resultFragment_to_DBFragment"
+            app:destination="@id/DBFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/DBFragment"
+        android:name="kr.intin.ble_kotlin.ui.DBFragment"
+        android:label="DBFragment"
+        tools:layout="@layout/fragment_db"/>
 </navigation>

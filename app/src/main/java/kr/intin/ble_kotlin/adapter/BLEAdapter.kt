@@ -58,6 +58,10 @@ class BLEAdapter(private val model: MainViewModel) : RecyclerView.Adapter<BLEAda
     fun clearList() {
         list.clear()
     }
+
+    fun isListEmpty () : Boolean {
+        return list.isEmpty()
+    }
 }
 
 @BindingAdapter("rssi")

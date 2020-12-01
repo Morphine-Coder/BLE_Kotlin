@@ -32,17 +32,20 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val today = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+        val today = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
         binding.btnReturn.setOnClickListener {
             findNavController().navigate(R.id.action_resultFragment_to_mainFragment)
         }
 
-        lifecycleScope.launch (Dispatchers.IO) {
-            model.db.getTime(today).observe(requireActivity(), androidx.lifecycle.Observer { times ->
-                if(times[times.size-1] >= 60) binding.tvTime.text = "${times[times.size-1] / 60} : ${times[times.size-1] % 60}"
-                else binding.tvTime.text = "0 : ${times[times.size-1] % 60}"
-            })
+        binding.btnDb.setOnClickListener {
+            findNavController().navigate(R.id.action_resultFragment_to_DBFragment)
+        }
+
+        lifecycleScope.launch (Dispatchers.IO){
+            val times = model.db.getTime(today)
+            binding.tvTime.text = model.timeString(times[times.size-1])
+
         }
 
     }

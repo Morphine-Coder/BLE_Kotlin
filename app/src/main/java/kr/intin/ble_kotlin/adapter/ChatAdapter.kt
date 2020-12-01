@@ -24,9 +24,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>(){
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
 
-        val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
-
-        holder.binding.chatTime = "${response[position]} : $date"
+        holder.binding.chatTime = response[position]
     }
 
     override fun getItemCount(): Int {
