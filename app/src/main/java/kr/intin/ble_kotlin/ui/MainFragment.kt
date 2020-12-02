@@ -3,6 +3,7 @@ package kr.intin.ble_kotlin.ui
 import android.Manifest
 import android.bluetooth.le.ScanResult
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -31,32 +33,30 @@ import java.util.*
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    val model : MainViewModel by activityViewModels()
+    val model: MainViewModel by activityViewModels()
     val TAG = MainFragment::class.java.simpleName
-    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         it[Manifest.permission.ACCESS_FINE_LOCATION].let { fineBool ->
-            if(fineBool!!){
+            if (fineBool!!) {
                 val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
                 Toast.makeText(requireContext(), "위치권한 : $date", Toast.LENGTH_SHORT).show()
                 model.scan()
-            }
-            else{
+            } else {
                 Toast.makeText(requireContext(), "위치권한에 동의해주세요", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
 
-        if(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
-        }
-        else {
+        } else {
             model.scan()
         }
 
@@ -69,20 +69,20 @@ class MainFragment : Fragment() {
         val adapter = BLEAdapter(model)
         binding.recycler.adapter = adapter
 
-        if (!adapter.isListEmpty()) {
-            Log.d(TAG, "onViewCreated: adapter list clear")
-            adapter.clearList()
-        }
-
         model.scanResultLiveData.observe(requireActivity(), Observer {
-            adapter.addResult(it)
+            if (it?.device?.name?.contains("OVIEW") == true) {
+                adapter.addResult(it)
+            }
         })
 
-        adapter.setItemClickListener(object : BLEAdapter.ItemClickListener{
+        adapter.setItemClickListener(object : BLEAdapter.ItemClickListener {
             override fun onClick(scanResult: ScanResult?) {
-                model.connect(scanResult, context)
-                findNavController().navigate(R.id.action_mainFragment_to_communicateFragment)
-                adapter.clearList()
+
+                if(findNavController().currentDestination?.id == R.id.mainFragment){
+                    model.connect(scanResult, context)
+                    findNavController().navigate(R.id.action_mainFragment_to_communicateFragment)
+                    adapter.clearList()
+                }
             }
         })
     }

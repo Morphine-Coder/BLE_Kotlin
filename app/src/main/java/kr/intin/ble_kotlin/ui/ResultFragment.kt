@@ -35,11 +35,15 @@ class ResultFragment : Fragment() {
         val today = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
         binding.btnReturn.setOnClickListener {
-            findNavController().navigate(R.id.action_resultFragment_to_mainFragment)
+            if(findNavController().currentDestination?.id == R.id.resultFragment){
+                findNavController().navigate(R.id.action_resultFragment_to_mainFragment)
+            }
         }
 
         binding.btnDb.setOnClickListener {
-            findNavController().navigate(R.id.action_resultFragment_to_DBFragment)
+            if(findNavController().currentDestination?.id == R.id.resultFragment){
+                findNavController().navigate(R.id.action_resultFragment_to_DBFragment)
+            }
         }
 
         lifecycleScope.launch (Dispatchers.IO){

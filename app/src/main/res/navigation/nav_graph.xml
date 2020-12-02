@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainFragment_to_communicateFragment"
             app:destination="@id/communicateFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
     </fragment>
     <fragment
         android:id="@+id/communicateFragment"

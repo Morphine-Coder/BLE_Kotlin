@@ -1,5 +1,6 @@
 package kr.intin.ble_kotlin.ui
 
+import android.bluetooth.BluetoothProfile
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -48,9 +49,11 @@ class CommunicateFragment : Fragment() {
         })
 
         model.connectState.observe(requireActivity(), Observer {
-            if (it == 0) {
-                Toast.makeText(context, "연결이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_communicateFragment_to_resultFragment)
+            if (it == BluetoothProfile.STATE_DISCONNECTED) {
+                if(findNavController().currentDestination?.id == R.id.communicateFragment){
+                    Toast.makeText(context, "연결이 취소되었습니다.", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_communicateFragment_to_resultFragment)
+                }
             }
         })
 

@@ -50,16 +50,20 @@ class MainViewModel @ViewModelInject constructor(
 
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-            if(newState == 2){
+            if(newState == BluetoothProfile.STATE_CONNECTED){
                 bluetoothGatt = gatt
                 bluetoothGatt?.discoverServices()
                 connectState.postValue(newState)
                 Log.d(TAG, "onConnectionStateChange : $newState / $status")
             }
-            else if (newState == 0){
+            else if (newState == BluetoothProfile.STATE_DISCONNECTED){
                 connectState.postValue(newState)
+                bluetoothGatt?.disconnect()
                 bluetoothGatt = null
                 Log.d(TAG, "onConnectionStateChange : $newState / $status")
+            }
+            else {
+                Log.d(TAG, "onConnectionStateChange: $newState")
             }
 
         }
@@ -152,6 +156,12 @@ class MainViewModel @ViewModelInject constructor(
     fun connect(result: ScanResult?, context: Context?) {
         stop()
         scanResultLiveData.value = result
+
+        if(bluetoothGatt != null) {
+            bluetoothGatt?.disconnect()
+            bluetoothGatt = null
+            Log.d(TAG, "connect: ble is not disconnected")
+        }
         result?.device?.connectGatt(context, false, gattCallback)
     }
 
@@ -224,13 +234,13 @@ class MainViewModel @ViewModelInject constructor(
         sendData("OFF")
         timerTask.cancel()
         val usedTime = usedTimer.value
-        val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
-
-        viewModelScope.launch (Dispatchers.IO){
-            db.insertTime(useTime)
+        if(usedTime != 0) {
+            val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
+            viewModelScope.launch (Dispatchers.IO){
+                db.insertTime(useTime)
+            }
+            usedTimer.value = 0
         }
-
-        usedTimer.value = 0
     }
 
     private fun makeTimerTask () : TimerTask {
