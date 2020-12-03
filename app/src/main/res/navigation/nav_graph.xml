@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="kr.intin.ble_kotlin.ui.MainFragment"
+        android:name="kr.intin.ble_kotlin.ui.mainFragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/communicateFragment"
-        android:name="kr.intin.ble_kotlin.ui.CommunicateFragment"
+        android:name="kr.intin.ble_kotlin.ui.mainFragments.CommunicateFragment"
         android:label="fragment_communicate"
         tools:layout="@layout/fragment_communicate" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
-        android:name="kr.intin.ble_kotlin.ui.ResultFragment"
+        android:name="kr.intin.ble_kotlin.ui.mainFragments.ResultFragment"
         android:label="ResultFragment"
         tools:layout="@layout/fragment_result">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/DBFragment"
-        android:name="kr.intin.ble_kotlin.ui.DBFragment"
+        android:name="kr.intin.ble_kotlin.ui.mainFragments.DBFragment"
         android:label="DBFragment"
         tools:layout="@layout/fragment_db"/>
 </navigation>

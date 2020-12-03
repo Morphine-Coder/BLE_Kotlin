@@ -1,4 +1,4 @@
-package kr.intin.ble_kotlin.ui
+package kr.intin.ble_kotlin.ui.mainFragments
 
 import android.bluetooth.BluetoothProfile
 import android.os.Bundle
@@ -10,16 +10,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.adapter.ChatAdapter
 import kr.intin.ble_kotlin.databinding.FragmentCommunicateBinding
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
-import java.text.SimpleDateFormat
 
 @AndroidEntryPoint
 class CommunicateFragment : Fragment() {

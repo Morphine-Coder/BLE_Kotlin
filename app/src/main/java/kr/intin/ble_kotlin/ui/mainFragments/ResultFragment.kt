@@ -1,5 +1,6 @@
-package kr.intin.ble_kotlin.ui
+package kr.intin.ble_kotlin.ui.mainFragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.databinding.FragmentResultBinding
+import kr.intin.ble_kotlin.ui.Sub.SubActivity
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +46,12 @@ class ResultFragment : Fragment() {
             if(findNavController().currentDestination?.id == R.id.resultFragment){
                 findNavController().navigate(R.id.action_resultFragment_to_DBFragment)
             }
+        }
+
+        binding.btnIntent.setOnClickListener {
+            val intent = Intent(context, SubActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
 
         lifecycleScope.launch (Dispatchers.IO){

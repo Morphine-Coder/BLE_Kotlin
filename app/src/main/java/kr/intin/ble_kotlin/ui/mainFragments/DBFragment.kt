@@ -1,4 +1,4 @@
-package kr.intin.ble_kotlin.ui
+package kr.intin.ble_kotlin.ui.mainFragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -37,6 +37,7 @@ class DBFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = DBAdapter()
         binding.recyclerView.adapter = adapter
+
         lifecycleScope.launch (Dispatchers.IO){
             adapter.list = model.db.getAll() as ArrayList<UseTime>
         }
