@@ -29,6 +29,7 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     val model: MainViewModel by activityViewModels()
     val TAG = MainFragment::class.java.simpleName
+<<<<<<< HEAD
 
     //위치권한을 물어보는 창을 띄움
     private val requestPermission =
@@ -73,6 +74,33 @@ class MainFragment : Fragment() {
 
         }
         //xml 바인딩
+=======
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        it[Manifest.permission.ACCESS_FINE_LOCATION].let { fineBool ->
+            if (fineBool!!) {
+                val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
+                Toast.makeText(requireContext(), "위치권한 : $date", Toast.LENGTH_SHORT).show()
+                model.scan()
+            } else {
+                Toast.makeText(requireContext(), "위치권한에 동의해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
+        } else {
+            model.scan()
+        }
+
+>>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         return binding.root
     }
@@ -91,7 +119,11 @@ class MainFragment : Fragment() {
         adapter.setItemClickListener(object : BLEAdapter.ItemClickListener {
             override fun onClick(scanResult: ScanResult?) {
 
+<<<<<<< HEAD
                 if (findNavController().currentDestination?.id == R.id.mainFragment) {
+=======
+                if(findNavController().currentDestination?.id == R.id.mainFragment){
+>>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
                     model.connect(scanResult, context)
                     findNavController().navigate(R.id.action_mainFragment_to_communicateFragment)
                     adapter.clearList()

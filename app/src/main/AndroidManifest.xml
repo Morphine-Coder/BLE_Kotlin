@@ -20,10 +20,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BLE_Kotlin">
+<<<<<<< HEAD
         <activity android:name=".ui.Sub.DeviceActivity"></activity>
         <activity
             android:name=".ui.Sub.SubActivity"
             android:label="@string/title_activity_sub"></activity>
+=======
+        <activity
+            android:name=".ui.Sub.SubActivity"
+            android:label="@string/title_activity_sub">
+        </activity>
+
+>>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+
+>>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     </application>
 
 </manifest>
