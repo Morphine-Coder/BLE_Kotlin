@@ -21,17 +21,14 @@ import javax.inject.Inject
 class DBFragment : Fragment() {
 
     @Inject
-    lateinit var db : UseTimeDAO
-    private lateinit var binding : FragmentDbBinding
+    lateinit var db: UseTimeDAO
+    private lateinit var binding: FragmentDbBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    ): View {
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_db, container, false)
@@ -43,10 +40,10 @@ class DBFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = DBAdapter()
         binding.recyclerView.adapter = adapter
-        lifecycleScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             adapter.list = db.getAll() as ArrayList<UseTime>
-        } }
-
+        }
     }
+
 
 }
