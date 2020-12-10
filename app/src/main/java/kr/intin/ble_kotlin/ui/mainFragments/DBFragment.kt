@@ -26,7 +26,7 @@ class DBFragment : Fragment() {
     private lateinit var binding : FragmentDbBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_db, container, false)
 
