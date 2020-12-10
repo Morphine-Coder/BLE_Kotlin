@@ -6,13 +6,17 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kr.intin.ble_kotlin.MainActivity
 import kr.intin.ble_kotlin.data.dao.UseTimeDAO
 import kr.intin.ble_kotlin.data.entity.UseTime
 import kr.intin.ble_kotlin.di.annotation.RXService
@@ -241,6 +245,7 @@ class MainViewModel @ViewModelInject constructor(
             }
             usedTimer.value = 0
         }
+
     }
 
     private fun makeTimerTask () : TimerTask {

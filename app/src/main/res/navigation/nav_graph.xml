@@ -13,34 +13,10 @@
         <action
             android:id="@+id/action_mainFragment_to_communicateFragment"
             app:destination="@id/communicateFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
     </fragment>
     <fragment
         android:id="@+id/communicateFragment"
         android:name="kr.intin.ble_kotlin.ui.mainFragments.CommunicateFragment"
         android:label="fragment_communicate"
-        tools:layout="@layout/fragment_communicate" >
-        <action
-            android:id="@+id/action_communicateFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/resultFragment"
-        android:name="kr.intin.ble_kotlin.ui.mainFragments.ResultFragment"
-        android:label="ResultFragment"
-        tools:layout="@layout/fragment_result">
-        <action
-            android:id="@+id/action_resultFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_resultFragment_to_DBFragment"
-            app:destination="@id/DBFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/DBFragment"
-        android:name="kr.intin.ble_kotlin.ui.mainFragments.DBFragment"
-        android:label="DBFragment"
-        tools:layout="@layout/fragment_db"/>
+        tools:layout="@layout/fragment_communicate" />
 </navigation>
