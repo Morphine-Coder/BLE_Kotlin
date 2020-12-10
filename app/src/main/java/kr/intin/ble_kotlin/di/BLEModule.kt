@@ -3,6 +3,7 @@ package kr.intin.ble_kotlin.di
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
+import android.bluetooth.le.ScanCallback
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,6 @@ object BLEModule {
     @Singleton
     fun provideBLEModule (@ApplicationContext context: Context): BluetoothLeScanner {
         val adapter : BluetoothAdapter by lazy(LazyThreadSafetyMode.NONE) {
-            //val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             manager.adapter
         }
@@ -42,4 +42,5 @@ object BLEModule {
     fun provideTXChatUUID () : UUID {
         return UUID.fromString("00004a5b-0000-1000-8000-00805f9b34fb")
     }
+
 }
