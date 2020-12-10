@@ -20,4 +20,9 @@ object DBModule {
         return Room.databaseBuilder(context,
         AppDatabase::class.java, "usedTime").build().useTimeDao()
     }
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
 }
