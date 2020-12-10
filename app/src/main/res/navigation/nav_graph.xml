@@ -13,20 +13,14 @@
         <action
             android:id="@+id/action_mainFragment_to_communicateFragment"
             app:destination="@id/communicateFragment" />
-<<<<<<< HEAD
-=======
         <action
             android:id="@+id/action_mainFragment_to_resultFragment"
             app:destination="@id/resultFragment" />
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     </fragment>
     <fragment
         android:id="@+id/communicateFragment"
         android:name="kr.intin.ble_kotlin.ui.mainFragments.CommunicateFragment"
         android:label="fragment_communicate"
-<<<<<<< HEAD
-        tools:layout="@layout/fragment_communicate" />
-=======
         tools:layout="@layout/fragment_communicate" >
         <action
             android:id="@+id/action_communicateFragment_to_resultFragment"
@@ -49,5 +43,4 @@
         android:name="kr.intin.ble_kotlin.ui.mainFragments.DBFragment"
         android:label="DBFragment"
         tools:layout="@layout/fragment_db"/>
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
 </navigation>

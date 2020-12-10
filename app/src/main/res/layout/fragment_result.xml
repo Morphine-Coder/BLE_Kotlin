@@ -37,16 +37,10 @@
             android:id="@+id/btn_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:text="재시작"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_db"
-=======
             android:layout_marginEnd="13dp"
             android:text="재시작"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_intent"
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -57,11 +51,6 @@
             android:text="DB확인"
             app:layout_constraintBottom_toBottomOf="@+id/btn_return"
             app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-            app:layout_constraintStart_toEndOf="@+id/btn_return"
-            app:layout_constraintTop_toTopOf="@+id/btn_return" />
-
-=======
             app:layout_constraintStart_toEndOf="@+id/btn_intent"
             app:layout_constraintTop_toTopOf="@+id/btn_return" />
 
@@ -74,6 +63,5 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_db"
             app:layout_constraintStart_toEndOf="@+id/btn_return"
             app:layout_constraintTop_toTopOf="@+id/btn_return" />
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

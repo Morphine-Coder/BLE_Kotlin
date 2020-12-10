@@ -1,10 +1,6 @@
 package kr.intin.ble_kotlin.ui.mainFragments
 
 import android.bluetooth.BluetoothProfile
-<<<<<<< HEAD
-import android.content.Intent
-=======
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,10 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.adapter.ChatAdapter
 import kr.intin.ble_kotlin.databinding.FragmentCommunicateBinding
-<<<<<<< HEAD
-import kr.intin.ble_kotlin.ui.Sub.SubActivity
-=======
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
 
 @AndroidEntryPoint
@@ -56,12 +48,7 @@ class CommunicateFragment : Fragment() {
             if (it == BluetoothProfile.STATE_DISCONNECTED) {
                 if(findNavController().currentDestination?.id == R.id.communicateFragment){
                     Toast.makeText(context, "연결이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-<<<<<<< HEAD
-                    val intent = Intent(context, SubActivity::class.java)
-                    startActivity(intent)
-=======
                     findNavController().navigate(R.id.action_communicateFragment_to_resultFragment)
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
                 }
             }
         })

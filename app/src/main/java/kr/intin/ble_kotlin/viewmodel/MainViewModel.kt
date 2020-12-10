@@ -23,33 +23,15 @@ import kotlin.experimental.and
 
 
 class MainViewModel @ViewModelInject constructor(
-<<<<<<< HEAD
-
-=======
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     private val scanner: BluetoothLeScanner,
     @RXService private val RX_SERVICE_UUID: UUID,
     @TXChat private val TX_CHAR_UUID: UUID,
     val db: UseTimeDAO
-<<<<<<< HEAD
-
-) : ViewModel() {
-
-    fun getUseTimeDAO() : UseTimeDAO{
-        return this.db;
-    }
-
-    private val TAG = MainViewModel::class.java.simpleName
-
- val scanResultLiveData = MutableLiveData<ScanResult?>()
-
-=======
 ) : ViewModel() {
 
     private val TAG = MainViewModel::class.java.simpleName
 
     val scanResultLiveData = MutableLiveData<ScanResult?>()
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     private val scanCallback = object :ScanCallback(){
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
@@ -60,18 +42,10 @@ class MainViewModel @ViewModelInject constructor(
 
     private var bluetoothGatt: BluetoothGatt? = null
     private var characteristic: BluetoothGattCharacteristic? = null
-<<<<<<< HEAD
-
-=======
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     val responseData = MutableLiveData<String>()
     val connectState = MutableLiveData<Int>()
     val usedTimer = MutableLiveData<Int>(0)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c6b32022a662bda61efeb35214f1a0da5400d90c
     private val gattCallback = object : BluetoothGattCallback() {
 
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
