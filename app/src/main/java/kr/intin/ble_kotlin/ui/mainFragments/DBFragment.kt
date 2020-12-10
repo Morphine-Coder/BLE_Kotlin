@@ -1,13 +1,11 @@
 package kr.intin.ble_kotlin.ui.mainFragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.coroutineScope
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -17,18 +15,26 @@ import kr.intin.ble_kotlin.adapter.DBAdapter
 import kr.intin.ble_kotlin.data.dao.UseTimeDAO
 import kr.intin.ble_kotlin.data.entity.UseTime
 import kr.intin.ble_kotlin.databinding.FragmentDbBinding
-import kr.intin.ble_kotlin.viewmodel.MainViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class DBFragment : Fragment() {
-    private val model: MainViewModel by activityViewModels()
+
+    @Inject
+    lateinit var db : UseTimeDAO
     private lateinit var binding : FragmentDbBinding
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_db, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_db, container, false)
 
         return binding.root
     }
@@ -37,10 +43,10 @@ class DBFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = DBAdapter()
         binding.recyclerView.adapter = adapter
+        lifecycleScope.launch(Dispatchers.IO){
+            adapter.list = db.getAll() as ArrayList<UseTime>
+        } }
 
-        lifecycleScope.launch (Dispatchers.IO){
-            adapter.list = model.db.getAll() as ArrayList<UseTime>
-        }
     }
 
 }
