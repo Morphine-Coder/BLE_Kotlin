@@ -1,4 +1,4 @@
-package kr.intin.ble_kotlin.ui.mainFragments
+package kr.intin.ble_kotlin.ui.Sub
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +23,7 @@ class DBFragment : Fragment() {
     @Inject
     lateinit var db: UseTimeDAO
     private lateinit var binding: FragmentDbBinding
+    private val TAG = DBFragment::class.java.simpleName
 
 
     override fun onCreateView(

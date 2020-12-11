@@ -49,25 +49,28 @@ class MainViewModel @ViewModelInject constructor(
     val responseData = MutableLiveData<String>()
     val connectState = MutableLiveData<Int>()
     val usedTimer = MutableLiveData<Int>(0)
+    val toastingMessage = MutableLiveData<String>("")
 
     private val gattCallback = object : BluetoothGattCallback() {
 
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-            if(newState == BluetoothProfile.STATE_CONNECTED){
-                bluetoothGatt = gatt
-                bluetoothGatt?.discoverServices()
-                connectState.postValue(newState)
-                Log.d(TAG, "onConnectionStateChange : $newState / $status")
-            }
-            else if (newState == BluetoothProfile.STATE_DISCONNECTED){
-                connectState.postValue(newState)
-                bluetoothGatt?.disconnect()
-                bluetoothGatt = null
-                Log.d(TAG, "onConnectionStateChange : $newState / $status")
-            }
-            else {
-                Log.d(TAG, "onConnectionStateChange: $newState")
+            when (newState) {
+                BluetoothProfile.STATE_CONNECTED -> {
+                    bluetoothGatt = gatt
+                    bluetoothGatt?.discoverServices()
+                    connectState.postValue(newState)
+                    Log.d(TAG, "onConnectionStateChange : $newState / $status")
+                }
+                BluetoothProfile.STATE_DISCONNECTED -> {
+                    connectState.postValue(newState)
+                    bluetoothGatt?.disconnect()
+                    bluetoothGatt = null
+                    Log.d(TAG, "onConnectionStateChange : $newState / $status")
+                }
+                else -> {
+                    Log.d(TAG, "onConnectionStateChange: $newState")
+                }
             }
 
         }
@@ -192,12 +195,13 @@ class MainViewModel @ViewModelInject constructor(
 
     private fun sendData (data : String) {
         if(characteristic == null) {
-            usedTimer.value = 99999
+            toastingMessage.postValue("연결이 되지 않았습니다.")
         }
         else{
+            toastingMessage.postValue("")
             characteristic?.value = String2Byte(data)
             characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            bluetoothGatt?.writeCharacteristic(characteristic) // 수정해야 함. 11.27
+            bluetoothGatt?.writeCharacteristic(characteristic)
         }
     }
 

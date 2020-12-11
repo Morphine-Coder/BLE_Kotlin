@@ -24,7 +24,6 @@ object BLEModule {
     @Singleton
     fun provideBLEModule (@ApplicationContext context: Context): BluetoothLeScanner {
         val adapter : BluetoothAdapter by lazy(LazyThreadSafetyMode.NONE) {
-            //val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             val manager = context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             manager.adapter
         }

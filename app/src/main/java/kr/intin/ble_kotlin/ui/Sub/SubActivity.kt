@@ -14,14 +14,7 @@ class SubActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         val binding : ActivitySubBinding = DataBindingUtil.setContentView(this,R.layout.activity_sub)
 
-//        binding.btnMain.setOnClickListener {
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
     }
 }

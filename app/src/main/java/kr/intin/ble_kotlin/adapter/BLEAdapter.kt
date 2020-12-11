@@ -13,7 +13,7 @@ import kr.intin.ble_kotlin.viewmodel.MainViewModel
 class BLEAdapter(private val model: MainViewModel) : RecyclerView.Adapter<BLEAdapter.BLEViewHolder>() {
 
     private val list = arrayListOf<ScanResult?>()
-    private val TAG = "BLEAdapter"
+    private val TAG = BLEAdapter::class.java.simpleName
     private lateinit var itemClickListner: ItemClickListener
 
     class BLEViewHolder(val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root)

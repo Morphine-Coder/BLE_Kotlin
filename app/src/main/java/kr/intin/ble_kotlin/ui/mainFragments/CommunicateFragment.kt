@@ -31,7 +31,7 @@ class CommunicateFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_communicate, container, false)
         binding.recyclerReceiveMsg.adapter = adapter
         return binding.root
@@ -42,7 +42,6 @@ class CommunicateFragment : Fragment() {
 
         binding.model = model
         model.responseData.observe(requireActivity(), Observer {
-            //Adapter에 추가.
             adapter.addResponse(it)
         })
 
@@ -50,7 +49,6 @@ class CommunicateFragment : Fragment() {
             if (it == BluetoothProfile.STATE_DISCONNECTED) {
                 if(findNavController().currentDestination?.id == R.id.communicateFragment){
                     Toast.makeText(context, "연결이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                    //findNavController().navigate(R.id.action_communicateFragment_to_resultFragment)
                     val intent = Intent(context, SubActivity::class.java)
                     startActivity(intent)
                 }
@@ -59,6 +57,12 @@ class CommunicateFragment : Fragment() {
 
         model.usedTimer.observe(requireActivity(), Observer {
             binding.tvTimer.text = model.timeString(it)
+        })
+
+        model.toastingMessage.observe(requireActivity(), Observer {
+            if(it != "") {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
         })
 
     }

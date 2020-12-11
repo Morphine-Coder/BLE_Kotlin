@@ -9,6 +9,7 @@ import kr.intin.ble_kotlin.databinding.ItemDbBinding
 class DBAdapter : RecyclerView.Adapter<DBAdapter.DBViewHolder>(){
 
     var list = arrayListOf<UseTime>()
+    val TAG = DBAdapter::class.java.simpleName
 
     class DBViewHolder(val binding: ItemDbBinding) : RecyclerView.ViewHolder(binding.root)
 

@@ -29,6 +29,7 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     val model: MainViewModel by activityViewModels()
     val TAG = MainFragment::class.java.simpleName
+
     private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         it[Manifest.permission.ACCESS_FINE_LOCATION].let { fineBool ->
             if (fineBool!!) {
@@ -45,7 +46,6 @@ class MainFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
 
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

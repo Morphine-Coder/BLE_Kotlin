@@ -13,6 +13,7 @@ import java.util.*
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>(){
 
     private val response = arrayListOf<String>()
+    private val TAG = ChatAdapter::class.java.simpleName
 
     class ChatViewHolder (val binding: ItemReceivemsgBinding) : RecyclerView.ViewHolder(binding.root)
 
