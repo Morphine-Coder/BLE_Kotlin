@@ -1,6 +1,7 @@
 package kr.intin.ble_kotlin.ui.mainFragments
 
 import android.Manifest
+import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.ScanResult
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -71,12 +72,16 @@ class MainFragment : Fragment() {
 
         adapter.setItemClickListener(object : BLEAdapter.ItemClickListener {
             override fun onClick(scanResult: ScanResult?) {
-
                 if(findNavController().currentDestination?.id == R.id.mainFragment){
                     model.connect(scanResult, context)
-                    findNavController().navigate(R.id.action_mainFragment_to_communicateFragment)
-                    adapter.clearList()
                 }
+            }
+        })
+
+        model.connectState.observe(requireActivity(), Observer {
+            if(it == BluetoothProfile.STATE_CONNECTED) {
+                findNavController().navigate(R.id.action_mainFragment_to_communicateFragment)
+                adapter.clearList()
             }
         })
     }
