@@ -2,6 +2,8 @@ package kr.intin.ble_kotlin.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kr.intin.ble_kotlin.data.entity.UseTime
 import kr.intin.ble_kotlin.databinding.ItemDbBinding
@@ -27,4 +29,24 @@ class DBAdapter : RecyclerView.Adapter<DBAdapter.DBViewHolder>(){
     override fun getItemCount(): Int {
         return list.size
     }
+
+}
+@BindingAdapter("index")
+fun setIndex (textView: TextView, useTime: UseTime) {
+    textView.text = useTime.index.toString()
+}
+
+@BindingAdapter("usedTime")
+fun setUsedTime (textView: TextView, useTime: UseTime) {
+    textView.text = useTime.usedTime?.toString()
+}
+
+@BindingAdapter("usedDate")
+fun setUsedDate (textView: TextView, useTime: UseTime) {
+    textView.text = useTime.usedDate
+}
+
+@BindingAdapter("startedTime")
+fun setStartedTime (textView: TextView, usedTime: UseTime) {
+    textView.text = usedTime.startedTime
 }

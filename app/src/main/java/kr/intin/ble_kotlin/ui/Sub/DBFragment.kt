@@ -22,6 +22,7 @@ class DBFragment : Fragment() {
 
     @Inject
     lateinit var db: UseTimeDAO
+
     private lateinit var binding: FragmentDbBinding
     private val TAG = DBFragment::class.java.simpleName
 
@@ -31,7 +32,6 @@ class DBFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_db, container, false)
 
         return binding.root
@@ -41,6 +41,7 @@ class DBFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = DBAdapter()
         binding.recyclerView.adapter = adapter
+
         lifecycleScope.launch(Dispatchers.IO) {
             adapter.list = db.getAll() as ArrayList<UseTime>
         }

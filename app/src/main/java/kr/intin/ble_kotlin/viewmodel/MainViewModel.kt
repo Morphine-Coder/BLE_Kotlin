@@ -7,7 +7,10 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.health.TimerStat
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -47,6 +50,7 @@ class MainViewModel @ViewModelInject constructor(
     private var bluetoothGatt: BluetoothGatt? = null
     private var characteristic: BluetoothGattCharacteristic? = null
     val responseData = MutableLiveData<String>()
+    val sendData = MutableLiveData<String>()
     val connectState = MutableLiveData<Int>()
     val usedTimer = MutableLiveData<Int>(0)
     val toastingMessage = MutableLiveData<String>("")
@@ -187,7 +191,14 @@ class MainViewModel @ViewModelInject constructor(
         for (b in data) {
             stringBuilder.append(String.format("%02X", b and 0xff.toByte()))
         }
+
         val date = SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Date())
+
+        if (s == "START-OK") {
+            timerStart()
+            startedTime = date
+        }
+
         s += date
         Log.d(TAG, s)
         responseData.postValue(s)
@@ -207,18 +218,19 @@ class MainViewModel @ViewModelInject constructor(
 
     fun sendStart() {
         sendData("START")
-        timerStart()
-        startedTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+        sendData.value = "START"
     }
 
     fun sendPause() {
         sendData("PAUSE")
+        sendData.value = "PAUSE"
         timerTask.cancel()
     }
 
 
     fun sendEnd() {
         sendData("END")
+        sendData.value = "END"
         timerTask.cancel()
         val usedTime = usedTimer.value
         val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
@@ -235,11 +247,13 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun sendInfo() {
-        sendData("INF")
+        sendData("INFO")
+        sendData.value = "INFO"
     }
 
     fun sendOff() {
         sendData("OFF")
+        sendData.value = "OFF"
         timerTask.cancel()
         val usedTime = usedTimer.value
         if(usedTime != 0) {
