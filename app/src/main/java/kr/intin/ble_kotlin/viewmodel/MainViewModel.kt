@@ -24,6 +24,8 @@ import kr.intin.ble_kotlin.data.dao.UseTimeDAO
 import kr.intin.ble_kotlin.data.entity.UseTime
 import kr.intin.ble_kotlin.di.annotation.RXService
 import kr.intin.ble_kotlin.di.annotation.TXChat
+import kr.intin.ble_kotlin.ui.dialogs.TimeDialog
+import kr.intin.ble_kotlin.ui.dialogs.TimeDialogListener
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
@@ -243,7 +245,12 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun sendTime() {
-
+        val setTime = 0
+        val dialog = TimeDialog.TimeDialogBuilder().setBtnClickListener(object : TimeDialogListener{
+            override fun onClickListener(time: Int?) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     fun sendInfo() {
