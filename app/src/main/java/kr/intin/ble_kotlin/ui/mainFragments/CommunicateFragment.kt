@@ -17,6 +17,8 @@ import kr.intin.ble_kotlin.R
 import kr.intin.ble_kotlin.adapter.ChatAdapter
 import kr.intin.ble_kotlin.databinding.FragmentCommunicateBinding
 import kr.intin.ble_kotlin.ui.Sub.SubActivity
+import kr.intin.ble_kotlin.ui.dialogs.TimeDialog
+import kr.intin.ble_kotlin.ui.dialogs.TimeDialogListener
 import kr.intin.ble_kotlin.viewmodel.MainViewModel
 
 @AndroidEntryPoint
@@ -41,6 +43,18 @@ class CommunicateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.model = model
+
+        binding.btnTime.setOnClickListener {
+            val dialog = TimeDialog.TimeDialogBuilder().setBtnClickListener(object : TimeDialogListener {
+                override fun onClickListener(time: Int) {
+                    model.setTime = time
+                    model.sendTime()
+                }
+            }).create()
+
+            dialog.show(parentFragmentManager, dialog.tag)
+        }
+
         model.responseData.observe(requireActivity(), Observer {
             adapter.addResponse(it)
         })

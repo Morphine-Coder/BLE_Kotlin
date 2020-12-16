@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import kr.intin.ble_kotlin.MainActivity
 import kr.intin.ble_kotlin.data.dao.UseTimeDAO
@@ -51,11 +52,13 @@ class MainViewModel @ViewModelInject constructor(
 
     private var bluetoothGatt: BluetoothGatt? = null
     private var characteristic: BluetoothGattCharacteristic? = null
+
     val responseData = MutableLiveData<String>()
-    val sendData = MutableLiveData<String>()
+    private val sendData = MutableLiveData<String>()
     val connectState = MutableLiveData<Int>()
     val usedTimer = MutableLiveData<Int>(0)
     val toastingMessage = MutableLiveData<String>("")
+    var setTime = 0
 
     private val gattCallback = object : BluetoothGattCallback() {
 
@@ -157,7 +160,7 @@ class MainViewModel @ViewModelInject constructor(
 
 
     private val timer = Timer()
-    private lateinit var timerTask : TimerTask
+    private var timerTask : TimerTask? = null
     private val today : String = SimpleDateFormat("yyyy-MM-dd").format(Date())
     private lateinit var startedTime: String
 
@@ -201,7 +204,19 @@ class MainViewModel @ViewModelInject constructor(
             startedTime = date
         }
 
-        s += date
+        if (s == "TIME UP!!") {
+            timerTask?.cancel()
+            val usedTime = usedTimer.value
+            val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
+
+            viewModelScope.launch (Dispatchers.IO){
+                db.insertTime(useTime)
+            }
+
+            usedTimer.postValue(0)
+        }
+
+        s = "$s / $date"
         Log.d(TAG, s)
         responseData.postValue(s)
     }
@@ -226,14 +241,14 @@ class MainViewModel @ViewModelInject constructor(
     fun sendPause() {
         sendData("PAUSE")
         sendData.value = "PAUSE"
-        timerTask.cancel()
+        timerTask?.cancel()
     }
 
 
     fun sendEnd() {
         sendData("END")
         sendData.value = "END"
-        timerTask.cancel()
+        timerTask?.cancel()
         val usedTime = usedTimer.value
         val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)
 
@@ -245,12 +260,21 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun sendTime() {
-        val setTime = 0
-        val dialog = TimeDialog.TimeDialogBuilder().setBtnClickListener(object : TimeDialogListener{
-            override fun onClickListener(time: Int?) {
-                TODO("Not yet implemented")
+
+        when (setTime) {
+            in 1..9 -> {
+                sendData("TIME:0${setTime}")
+                sendData.value = "TIME:0${setTime}"
             }
-        })
+
+            0 -> toastingMessage.value = "시간을 설정해 주세요."
+
+            else -> {
+                sendData("TIME:${setTime}")
+                sendData.value = "TIME:${setTime}"
+            }
+        }
+
     }
 
     fun sendInfo() {
@@ -261,7 +285,8 @@ class MainViewModel @ViewModelInject constructor(
     fun sendOff() {
         sendData("OFF")
         sendData.value = "OFF"
-        timerTask.cancel()
+        
+        timerTask?.cancel()
         val usedTime = usedTimer.value
         if(usedTime != 0) {
             val useTime = UseTime(index = Date().time.toInt(), usedTime = usedTime, usedDate = today, startedTime = startedTime)

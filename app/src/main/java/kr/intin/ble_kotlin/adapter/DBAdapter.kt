@@ -13,7 +13,15 @@ class DBAdapter : RecyclerView.Adapter<DBAdapter.DBViewHolder>(){
     var list = arrayListOf<UseTime>()
     val TAG = DBAdapter::class.java.simpleName
 
-    class DBViewHolder(val binding: ItemDbBinding) : RecyclerView.ViewHolder(binding.root)
+    class DBViewHolder(val binding: ItemDbBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: UseTime) {
+            with(binding) {
+                db = item
+                executePendingBindings()
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DBViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,7 +31,7 @@ class DBAdapter : RecyclerView.Adapter<DBAdapter.DBViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: DBViewHolder, position: Int) {
-        holder.binding.db = list[position]
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {

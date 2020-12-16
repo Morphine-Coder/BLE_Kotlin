@@ -28,32 +28,17 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/edit_min"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/edit_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:ems="18"
-                    android:gravity="center"
-                    android:hint="1~99분"
-                    android:inputType="number"
-                    android:textColor="@color/blue"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tv_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="분"
-                    android:textColor="@color/blue"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                android:layout_weight="1"
+                android:ems="18"
+                android:gravity="center"
+                android:hint="1~99분"
+                android:inputType="number"
+                android:textColor="@color/blue"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btn_set"

@@ -25,7 +25,6 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
 //    private lateinit var appBarConfiguration: AppBarConfiguration
-//    private val model : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
