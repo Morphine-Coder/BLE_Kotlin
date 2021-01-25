@@ -17,7 +17,7 @@ interface UseTimeDAO {
     fun getTime(used_date : String): List<Int>
 
     @Query("SELECT * FROM UseTime")
-    fun getAll(): List<UseTime>
+    fun getAll(): List<UseTime> 
 
     @Delete
     fun delete(useTime: UseTime)
